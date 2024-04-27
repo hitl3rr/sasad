@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kredi Hesaplama</title>
+</head>
+<body>
+    <h2>Kredi Hesaplama</h2>
+    <form id="krediFormu">
+        <label for="emekHaqqi">Emek Haqqı (AZN): </label>
+        <input type="number" id="emekHaqqi" required><br><br>
+
+        <label for="istediyinizMebleq">İstədiyiniz Məbləğ (AZN): </label>
+        <input type="number" id="istediyinizMebleq" required><br><br>
+
+        <label for="istediyinizMuddet">İstədiyiniz Müddət (ay): </label>
+        <input type="number" id="istediyinizMuddet" required><br><br>
+
+        <button type="button" onclick="hesapla()">Hesapla</button>
+    </form>
+
+    <div id="sonuc"></div>
+
+    <script>
+        function hesapla() {
+            let emekHaqqi = parseFloat(document.getElementById("emekHaqqi").value);
+            let istediyinizMebleq = parseFloat(document.getElementById("istediyinizMebleq").value);
+            let istediyinizMuddet = parseInt(document.getElementById("istediyinizMuddet").value);
+
+            if (isNaN(emekHaqqi) || isNaN(istediyinizMebleq) || isNaN(istediyinizMuddet)) {
+                document.getElementById("sonuc").textContent = "Lütfən bütün sahələri doldurun.";
+                return;
+            }
+
+            if (istediyinizMuddet > 36) {
+                document.getElementById("sonuc").textContent = "Size bu şərtlərlə kredit düşmür";
+                return;
+            }
+
+            let faizDerecesi = 0.13;
+            if (istediyinizMuddet > 12 && istediyinizMuddet <= 24) {
+                faizDerecesi = 0.15;
+            } else if (istediyinizMuddet > 24) {
+                faizDerecesi = 0.17;
+            }
+
+            let maksimalMebleq = emekHaqqi * 10;
+            if (istediyinizMebleq > maksimalMebleq) {
+                document.getElementById("sonuc").textContent = "Size bu şərtlərlə kredit düşmür";
+                return;
+            }
+
+            let ayliqOdenish = (istediyinizMebleq * faizDerecesi) / istediyinizMuddet;
+            if (ayliqOdenish > emekHaqqi * 0.45) {
+                document.getElementById("sonuc").textContent = "Size bu şərtlərlə kredit düşmür";
+                return;
+            }
+
+            let result = ${istediyinizMebleq} AZN məbləği ${faizDerecesi * 100}% ilə ${istediyinizMuddet} ay müddətinə ayliq ${ayliqOdenish.toFixed(2)} manat ödənişlə verilir;
+            document.getElementById("sonuc").textContent = result;
+        }
+    </script>
+</body>
+</html>
